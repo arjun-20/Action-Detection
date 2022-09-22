@@ -31,6 +31,8 @@ model = load_model("DeepVisionModel.h5")
 
 new_title = '<h1 style="font-family:monospace; margin-top:0;text-align:center; color:orange; font-size: 70px;">Sign Language Detection</h1>'
 st.markdown(new_title, unsafe_allow_html=True)
+name = '<h2 style="font-family:monospace; margin-top:0;text-align:right; color:lightgray; font-size: 20px;">~ARjUN</h2>'
+st.markdown(name, unsafe_allow_html=True)
 if(camera.isOpened()):
 
     st.title("Webcam Live Feed")
