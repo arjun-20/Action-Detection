@@ -28,57 +28,59 @@ st.title("Hello ")
 
 
 
-st.title("Webcam Live Feed")
-run = st.checkbox('Run')
+
 FRAME_WINDOW = st.image([])
 camera = cv2.VideoCapture(0)
 model = load_model("DeepVisionModel.h5")
 
-
-while run:
-    _, frame1 = camera.read()
-    time.sleep(0.5)
-    _, frame2 = camera.read()
-
-
-    image_1_b_w = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
-    image_2_b_w = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
-
-    #image_1_b_w = np.dstack((image_1_b_w, image_1_b_w))
-    #image_2_b_w = np.dstack((image_2_b_w, image_2_b_w))
-    
-    
-    image_1_b_w = cv2.resize(image_1_b_w, (256,256))
-    image_2_b_w = cv2.resize(image_2_b_w, (256,256))
-
-    absdiff = cv2.absdiff(image_1_b_w, image_2_b_w)
-    
-    absdiff = np.dstack([absdiff, absdiff, absdiff])
-    #st.title(absdiff.shape)
-
-    FRAME_WINDOW.image(absdiff)
-
-    absdiff1 = np.expand_dims(absdiff, axis = 0)
-    
-
-    #cv2_imshow(absdiff)
-    val = model.predict(absdiff1)
-    if val == 1:
-        absdiff = cv2.putText(absdiff, 'Unsigned', org, font, 
-                   fontScale, color, thickness, cv2.LINE_AA)
-        FRAME_WINDOW.image(absdiff)
-
-    else:
-        absdiff = cv2.putText(absdiff, 'Signed', org, font, 
-                   fontScale, color, thickness, cv2.LINE_AA)
-        FRAME_WINDOW.image(absdiff)
+if(camera.isOpened()):
+  st.title("Webcam Live Feed")
+  run = st.checkbox('Run')
+  while run:
+      _, frame1 = camera.read()
+      time.sleep(0.5)
+      _, frame2 = camera.read()
 
 
+      image_1_b_w = cv2.cvtColor(frame1, cv2.COLOR_BGR2GRAY)
+      image_2_b_w = cv2.cvtColor(frame2, cv2.COLOR_BGR2GRAY)
 
+      #image_1_b_w = np.dstack((image_1_b_w, image_1_b_w))
+      #image_2_b_w = np.dstack((image_2_b_w, image_2_b_w))
+
+
+      image_1_b_w = cv2.resize(image_1_b_w, (256,256))
+      image_2_b_w = cv2.resize(image_2_b_w, (256,256))
+
+      absdiff = cv2.absdiff(image_1_b_w, image_2_b_w)
+
+      absdiff = np.dstack([absdiff, absdiff, absdiff])
+      #st.title(absdiff.shape)
+
+      FRAME_WINDOW.image(absdiff)
+
+      absdiff1 = np.expand_dims(absdiff, axis = 0)
+
+
+      #cv2_imshow(absdiff)
+      val = model.predict(absdiff1)
+      if val == 1:
+          absdiff = cv2.putText(absdiff, 'Unsigned', org, font, 
+                     fontScale, color, thickness, cv2.LINE_AA)
+          FRAME_WINDOW.image(absdiff)
+
+      else:
+          absdiff = cv2.putText(absdiff, 'Signed', org, font, 
+                     fontScale, color, thickness, cv2.LINE_AA)
+          FRAME_WINDOW.image(absdiff)
+
+
+
+
+  else:
+      st.write('Stopped')
 
 else:
-    st.write('Stopped')
-
-
+  st.title("Camera cannot be initialised")
 
 
